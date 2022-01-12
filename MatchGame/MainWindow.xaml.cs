@@ -41,15 +41,19 @@ namespace MatchGame
             {
                 timer.Stop();
                 timeTextBlock.Text = timeTextBlock.Text + " - Play again?";
+                gameEndTextBlock.Visibility = Visibility.Visible;
+                gameEndTextBlock.Text = "You won the game!";
             }
 
             if (tenthsOfSecondsElapsed <= 0)
             {
                 timer.Stop();
+                gameEndTextBlock.Visibility = Visibility.Visible;
+                gameEndTextBlock.Text = "Uh oh, timer run out!";
                 timeTextBlock.Text = timeTextBlock.Text + " - Play again?";
                 foreach (TextBlock textBlock in mainGrid.Children.OfType<TextBlock>())
                 {
-                    if (textBlock.Name != "timeTextBlock")
+                    if (textBlock.Name != "timeTextBlock" && textBlock.Name != "gameEndTextBlock")
                     {
                         textBlock.Visibility = Visibility.Hidden;
 
@@ -70,13 +74,14 @@ namespace MatchGame
                 "🦕", "🦕",
                 "🦘", "🦘",
                 "🦔", "🦔",
+
             };
 
             Random random = new Random();
 
             foreach (TextBlock textBlock in mainGrid.Children.OfType<TextBlock>())
             {
-                if (textBlock.Name != "timeTextBlock")
+                if (textBlock.Name != "timeTextBlock" && textBlock.Name != "gameEndTextBlock")
                 {
                     textBlock.Visibility = Visibility.Visible;
                     textBlock.Foreground = Brushes.Black;
@@ -86,6 +91,7 @@ namespace MatchGame
                     animalEmoji.RemoveAt(index);
                 }
             }
+            gameEndTextBlock.Visibility = Visibility.Hidden;
             timer.Start();
             tenthsOfSecondsElapsed = 300;
             matchesFound = 0;
