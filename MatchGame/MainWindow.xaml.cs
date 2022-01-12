@@ -24,6 +24,7 @@ namespace MatchGame
         DispatcherTimer timer = new DispatcherTimer();
         int tenthsOfSecondsElapsed;
         int matchesFound;
+        int highScore = 0;
 
         public MainWindow()
         {
@@ -39,10 +40,17 @@ namespace MatchGame
             timeTextBlock.Text = (tenthsOfSecondsElapsed / 10F).ToString("0.0s");
             if (matchesFound == 8)
             {
+                if(highScore <= tenthsOfSecondsElapsed)
+                {
+                    highScore = tenthsOfSecondsElapsed;
+                }
                 timer.Stop();
                 timeTextBlock.Text = timeTextBlock.Text + " - Play again?";
                 gameEndTextBlock.Visibility = Visibility.Visible;
+                highScoreTextBlock.Visibility = Visibility.Visible;
                 gameEndTextBlock.Text = "You won the game!";
+                highScoreTextBlock.Text = (highScore / 10F).ToString("0.0");
+                highScoreTextBlock.Text = "Best time: " + highScoreTextBlock.Text + "s left";
             }
 
             if (tenthsOfSecondsElapsed <= 0)
@@ -51,9 +59,13 @@ namespace MatchGame
                 gameEndTextBlock.Visibility = Visibility.Visible;
                 gameEndTextBlock.Text = "Uh oh, timer run out!";
                 timeTextBlock.Text = timeTextBlock.Text + " - Play again?";
+                highScoreTextBlock.Visibility = Visibility.Visible;
+                highScoreTextBlock.Text = (highScore / 10F).ToString("0.0");
+                highScoreTextBlock.Text = "Best time: " + highScoreTextBlock.Text + "s left";
+
                 foreach (TextBlock textBlock in mainGrid.Children.OfType<TextBlock>())
                 {
-                    if (textBlock.Name != "timeTextBlock" && textBlock.Name != "gameEndTextBlock")
+                    if (textBlock.Name != "timeTextBlock" && textBlock.Name != "gameEndTextBlock" && textBlock.Name != "highScoreTextBlock")
                     {
                         textBlock.Visibility = Visibility.Hidden;
 
@@ -81,7 +93,7 @@ namespace MatchGame
 
             foreach (TextBlock textBlock in mainGrid.Children.OfType<TextBlock>())
             {
-                if (textBlock.Name != "timeTextBlock" && textBlock.Name != "gameEndTextBlock")
+                if (textBlock.Name != "timeTextBlock" && textBlock.Name != "gameEndTextBlock" && textBlock.Name != "highScoreTextBlock")
                 {
                     textBlock.Visibility = Visibility.Visible;
                     textBlock.Foreground = Brushes.Black;
@@ -92,9 +104,11 @@ namespace MatchGame
                 }
             }
             gameEndTextBlock.Visibility = Visibility.Hidden;
+            highScoreTextBlock.Visibility = Visibility.Hidden;
             timer.Start();
             tenthsOfSecondsElapsed = 300;
             matchesFound = 0;
+            highScoreTextBlock.Text = "";
         }
 
         TextBlock lastTextBlockClicked;
