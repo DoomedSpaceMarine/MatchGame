@@ -79,6 +79,7 @@ namespace MatchGame
                 if (textBlock.Name != "timeTextBlock")
                 {
                     textBlock.Visibility = Visibility.Visible;
+                    textBlock.Foreground = Brushes.Black;
                     int index = random.Next(animalEmoji.Count);
                     string nextEmoji = animalEmoji[index];
                     textBlock.Text = nextEmoji;
@@ -93,24 +94,32 @@ namespace MatchGame
         TextBlock lastTextBlockClicked;
         bool findingMatch = false;
 
-        private void TextBlock_MouseDown(object sender, MouseButtonEventArgs e)
+        private async void TextBlock_MouseDown(object sender, MouseButtonEventArgs e)
         {
             TextBlock textBlock = sender as TextBlock;
             if(findingMatch == false)
             {
+                textBlock.Foreground = Brushes.Green;
+               await HighlightWait();
                 textBlock.Visibility = Visibility.Hidden;
                 lastTextBlockClicked = textBlock;
                 findingMatch = true;
             }
             else if (textBlock.Text == lastTextBlockClicked.Text)
             {
+                textBlock.Foreground = Brushes.Green;
+                await HighlightWait();
                 matchesFound++;
                 textBlock.Visibility = Visibility.Hidden;
                 findingMatch = false;
             }
             else
             {
+                textBlock.Foreground = Brushes.Red;
+                await HighlightWait();
                 lastTextBlockClicked.Visibility = Visibility.Visible;
+                textBlock.Foreground = Brushes.Black;
+                lastTextBlockClicked.Foreground = Brushes.Black;
                 findingMatch = false;
             }
         }
@@ -121,6 +130,13 @@ namespace MatchGame
             {
                 SetUpGame();
             }
+        }
+
+        public System.Windows.Media.Brush Foreground { get; set; }
+
+        async Task HighlightWait()
+        {
+            await Task.Delay(150);
         }
 
     }
