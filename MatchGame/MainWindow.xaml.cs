@@ -156,7 +156,7 @@ namespace MatchGame
 
         async Task HighlightWait()
         {
-            await Task.Delay(150);
+            await Task.Delay(125);
         }
 
     }
